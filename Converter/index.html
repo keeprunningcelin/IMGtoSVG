@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Converter</title>
+
+	<script type="text/javascript" charset="UTF-8">
+        	const OPENCVJS_PATH = "js/";
+        </script>
+        <script type="text/javascript" charset="UTF-8" src = "js/opencv.js"></script>
+        <script type="text/javascript" charset="UTF-8" src = "js/FileSaver.js"></script>
+
+
+        <script type="text/javascript">
+        	var iplImage = new IplImage();
+       
+        	function filechanged(event, imageID, iplImage,maxSize ) {
+   				cvLoadImage(event, imageID, iplImage,maxSize);
+				document.getElementById('rasterButton').disabled = false;
+        	}
+			function raster(imagId,imgSrc){
+				process(imagId,imgSrc);
+				document.getElementById('saveToSVG').disabled = false;
+			}
+		 </script>
+
+	<style>
+		.div-relative
+		{position:relative; color:#000; border:1px solid #000; width:500px; height:400px}   
+		.div-a
+		{ position:absolute; left:30px; top:30px; background:#F00; width:200px; height:100px}
+	</style>
+</head>
+
+<body>
+	<h1>MapConverter</h1>
+	<form>
+	  <fieldset style="border:2px black groove" align="left">
+	    <legend>参数设置</legend>
+	    <p>边缘检测:
+  <input type="number"  id="EdgeTd" min="0" max="255" value = "128">
+  (注：用于设定边缘检测的敏感度，范围为【0~255】，当边界是虚线、不清晰时需要降低数值，如果边界清晰则无须调整）</p>
+	    <p>二值检测:
+	      <input type="number"  id="BinaryTd"  min="0" max="255" value ="128">
+        （注：根据此参数对画面上可见元素的过滤，值越高则保留的元素越多，范围为【0~255】）</p>
+	    <p>矢量化参数:
+	      <input type="number"  id="DeleteTd"  min="0" value ="3" max="50"/>
+        （注：此值越低则线条越圆润，如当画面上有圆形时可以设定为0,，范围为【0~50】）</p>
+
+
+	  </fieldset>
+	</form>
+	<p><br />	
+	  <input type="file" id="openfile" onClick="cvLoadImagePre(event, 'openfile')" onchange="filechanged(event, 'dispImage', iplImage, 800)" >
+	  <input type="button" id="rasterButton" disabled onClick="raster('dispImage', iplImage)" value="矢量化" >
+	  <input type="button" id="saveToSVG" disabled onClick="downloadSvgFile()" value="保存svg"  >
+</p>
+
+<hr />
+	<img id="dispImage" src="">
+<script type="text/javascript"  src = "js/VectorImg.js"></script>
+
+
+</body>
+</html>
